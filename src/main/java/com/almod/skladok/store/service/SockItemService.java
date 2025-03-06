@@ -18,8 +18,8 @@ public class SockItemService {
     }
 
     public void addSocks(SockItem newSockItem) {
-        Optional<SockItem> existingSockItem =
-                sockItemRepository.findByItemColorAndMaterialPercentage(newSockItem.getItemColor(), newSockItem.getMaterialPercentage());
+        Optional<SockItem> existingSockItem = sockItemRepository
+                .findByItemColorAndMaterialPercentage(newSockItem.getItemColor(), newSockItem.getMaterialPercentage());
 
         if (existingSockItem.isPresent()) {
             SockItem item = existingSockItem.get();
