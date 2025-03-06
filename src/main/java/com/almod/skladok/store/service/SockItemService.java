@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class SockItemService {
-    private SockItemRepository sockItemRepository;
+    private final SockItemRepository sockItemRepository;
 
     public SockItemService(@Autowired SockItemRepository sockItemRepository) {
         this.sockItemRepository = sockItemRepository;
@@ -39,20 +39,12 @@ public class SockItemService {
     }
 
     public Integer getSocksCount(String itemColor, CompareType compareType, Integer materialPercentage) {
-        List<SockItem> items;
-        switch (compareType) {
-            case GT:
-                items = sockItemRepository.findByItemColorAndMaterialPercentageGreaterThan(itemColor, materialPercentage);
-                break;
-            case LT:
-                items = sockItemRepository.findByItemColorAndMaterialPercentageLessThan(itemColor, materialPercentage);
-                break;
-            case EQ:
-                items = sockItemRepository.findByItemColorAndMaterialPercentageEquals(itemColor, materialPercentage);
-                break;
-            default:
-                throw new IllegalArgumentException("Неподдерживаемый тип сравнения");
-        }
+        List<SockItem> items = switch (compareType) {
+            case GT -> sockItemRepository.findByItemColorAndMaterialPercentageGreaterThan(itemColor, materialPercentage);
+            case LT -> sockItemRepository.findByItemColorAndMaterialPercentageLessThan(itemColor, materialPercentage);
+            case EQ -> sockItemRepository.findByItemColorAndMaterialPercentageEquals(itemColor, materialPercentage);
+            default -> throw new IllegalArgumentException("Неподдерживаемый тип сравнения");
+        };
         return items.stream()
                 .mapToInt(SockItem::getUnits)
                 .sum();
