@@ -9,13 +9,16 @@ services:
       POSTGRES_DB: "skladok"
       POSTGRES_USER: "root"
       POSTGRES_PASSWORD: "root"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skladok
     ports:
       - "5432:5432"
 
-  my-app:
-    build: .
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: skladok-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skladok
     ports:
       - "8080:8080"
     depends_on:
