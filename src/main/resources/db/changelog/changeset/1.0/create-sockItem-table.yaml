@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Almod
+      changes:
+        - createTable:
+            tableName: sock_item
+            columns:
+              - column:
+                  name: item_color
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: material_percentage
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: units
+                  type: int
+  - changeSet:
+      id: 2
+      author: Almod
+      changes:
+        - addPrimaryKey:
+            columnNames: item_color, material_percentage
+            tableName: sock_item
+            constraintName: pk_sock_item
