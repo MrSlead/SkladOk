@@ -5,6 +5,7 @@ import com.almod.skladok.store.repository.SockItemRepository;
 import com.almod.skladok.utils.CompareType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class SockItemService {
         this.sockItemRepository = sockItemRepository;
     }
 
+    @Transactional
     public void addSocks(SockItem newSockItem) {
         Optional<SockItem> existingSockItem = sockItemRepository
                 .findByItemColorAndMaterialPercentage(newSockItem.getItemColor(), newSockItem.getMaterialPercentage());
@@ -30,6 +32,7 @@ public class SockItemService {
         }
     }
 
+    @Transactional
     public void removeSocks(SockItem sockItem) {
         SockItem existingSockItem = sockItemRepository.findByItemColorAndMaterialPercentage(sockItem.getItemColor(), sockItem.getMaterialPercentage())
                 .orElseThrow(() -> new RuntimeException("Товар не найден"));
@@ -38,6 +41,7 @@ public class SockItemService {
         sockItemRepository.save(existingSockItem);
     }
 
+    @Transactional(readOnly = true)
     public Integer getSocksCount(String itemColor, CompareType compareType, Integer materialPercentage) {
         List<SockItem> items = switch (compareType) {
             case GT -> sockItemRepository.findByItemColorAndMaterialPercentageGreaterThan(itemColor, materialPercentage);
