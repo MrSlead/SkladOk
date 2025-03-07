@@ -24,4 +24,9 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception e) {
+        return new ResponseEntity<>("Ошибка на сервере: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
