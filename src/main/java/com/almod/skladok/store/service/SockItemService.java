@@ -42,8 +42,8 @@ public class SockItemService {
     }
 
     @Transactional(readOnly = true)
-    public Integer getSocksCount(String itemColor, CompareType compareType, Integer materialPercentage) {
-        List<SockItem> items = switch (compareType) {
+    public Integer getSocksCount(String itemColor, String compareType, Integer materialPercentage) {
+        List<SockItem> items = switch (CompareType.valueOf(compareType.toUpperCase())) {
             case GT -> sockItemRepository.findByItemColorAndMaterialPercentageGreaterThan(itemColor, materialPercentage);
             case LT -> sockItemRepository.findByItemColorAndMaterialPercentageLessThan(itemColor, materialPercentage);
             case EQ -> sockItemRepository.findByItemColorAndMaterialPercentageEquals(itemColor, materialPercentage);
