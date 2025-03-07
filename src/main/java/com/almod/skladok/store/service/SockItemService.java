@@ -49,7 +49,6 @@ public class SockItemService {
             case GT -> sockItemRepository.findByItemColorAndMaterialPercentageGreaterThan(itemColor, materialPercentage);
             case LT -> sockItemRepository.findByItemColorAndMaterialPercentageLessThan(itemColor, materialPercentage);
             case EQ -> sockItemRepository.findByItemColorAndMaterialPercentageEquals(itemColor, materialPercentage);
-            default -> throw new IllegalArgumentException("Неподдерживаемый тип сравнения");
         };
         return items.stream()
                 .mapToInt(SockItem::getUnits)
