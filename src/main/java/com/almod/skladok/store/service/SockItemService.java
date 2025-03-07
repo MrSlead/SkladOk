@@ -34,9 +34,11 @@ public class SockItemService {
 
     @Transactional
     public void removeSocks(SockItem sockItem) {
-        SockItem existingSockItem = sockItemRepository.findByItemColorAndMaterialPercentage(sockItem.getItemColor(), sockItem.getMaterialPercentage())
+        SockItem existingSockItem = sockItemRepository
+                .findByItemColorAndMaterialPercentage(sockItem.getItemColor(), sockItem.getMaterialPercentage())
                 .orElseThrow(() -> new RuntimeException("Товар не найден"));
-        // Рассмотреть Если на удаление просят больше
+
+        if(existingSockItem.getUnits() - sockItem.getUnits() < 0) throw new RuntimeException("Указанного числа товара нет на складе");
         existingSockItem.setUnits(existingSockItem.getUnits() - sockItem.getUnits());
         sockItemRepository.save(existingSockItem);
     }

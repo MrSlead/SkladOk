@@ -30,12 +30,10 @@ public class SockItem implements Serializable {
     private String itemColor;
 
     @Id
-    @Min(1)
-    @Max(100)
     @NotNull
     private Integer materialPercentage;
 
-    @Min(1)
     @NotNull
+    @Min(0)
     private Integer units;
 }

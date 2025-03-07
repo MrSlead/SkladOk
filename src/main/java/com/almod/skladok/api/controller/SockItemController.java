@@ -1,6 +1,7 @@
 package com.almod.skladok.api.controller;
 
-import com.almod.skladok.store.model.SockItem;
+import com.almod.skladok.api.dto.SockItemDto;
+import com.almod.skladok.api.mapper.SockItemMapper;
 import com.almod.skladok.store.service.SockItemService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -25,15 +26,15 @@ public class SockItemController {
     }
 
     @PostMapping("/incoming")
-    public ResponseEntity<String> addSocks(@Valid @RequestBody SockItem sockItem) {
-        sockItemService.addSocks(sockItem);
+    public ResponseEntity<String> addSocks(@Valid @RequestBody SockItemDto sockItemDto) {
+        sockItemService.addSocks(SockItemMapper.MAPPER.mapToSockItem(sockItemDto));
 
         return ResponseEntity.ok("Операция выполнена успешна");
     }
 
     @PostMapping("/outgoing")
-    public ResponseEntity<String> removeSocks(@Valid @RequestBody SockItem sockItem) {
-        sockItemService.removeSocks(sockItem);
+    public ResponseEntity<String> removeSocks(@Valid @RequestBody SockItemDto sockItemDto) {
+        sockItemService.removeSocks(SockItemMapper.MAPPER.mapToSockItem(sockItemDto));
 
         return ResponseEntity.ok("Операция выполнена успешна");
     }
