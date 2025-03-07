@@ -1,8 +1,10 @@
 package com.almod.skladok.store.service;
 
+import com.almod.skladok.api.exception.InsufficientStockException;
 import com.almod.skladok.store.model.SockItem;
 import com.almod.skladok.store.repository.SockItemRepository;
 import com.almod.skladok.utils.CompareType;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +38,9 @@ public class SockItemService {
     public void removeSocks(SockItem sockItem) {
         SockItem existingSockItem = sockItemRepository
                 .findByItemColorAndMaterialPercentage(sockItem.getItemColor(), sockItem.getMaterialPercentage())
-                .orElseThrow(() -> new RuntimeException("Товар не найден"));
+                .orElseThrow(() -> new EntityNotFoundException("Товар не найден"));
 
-        if(existingSockItem.getUnits() - sockItem.getUnits() < 0) throw new RuntimeException("Указанного числа товара нет на складе");
+        if(existingSockItem.getUnits() - sockItem.getUnits() < 0) throw new InsufficientStockException("Указанного количества товара нет на складе");
         existingSockItem.setUnits(existingSockItem.getUnits() - sockItem.getUnits());
         sockItemRepository.save(existingSockItem);
     }

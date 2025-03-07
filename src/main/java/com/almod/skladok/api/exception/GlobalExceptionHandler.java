@@ -1,5 +1,6 @@
 package com.almod.skladok.api.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,11 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining("\n"));
 
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({EntityNotFoundException.class, InsufficientStockException.class})
+    public ResponseEntity<String> handleEntityNotFoundException(Exception e) {
+        return new ResponseEntity<>("Ошибка запроса: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
