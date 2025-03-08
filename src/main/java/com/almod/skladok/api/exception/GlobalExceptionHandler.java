@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        if (ex.getRequiredType() != null && ex.getRequiredType().isEnum()) {
+        if (ex.getRequiredType().isEnum()) {
             return new ResponseEntity<>("Невалидное значение для enum. Разрешенные значения: " +
                     Arrays.toString(ex.getRequiredType().getEnumConstants()), HttpStatus.BAD_REQUEST);
         }
