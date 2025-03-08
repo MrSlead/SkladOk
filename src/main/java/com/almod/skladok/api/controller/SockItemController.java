@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/storage/items")
 public class SockItemController {
+    private static final Logger LOG = LoggerFactory.getLogger(SockItemController.class);
+
     private final SockItemService sockItemService;
 
     public SockItemController(@Autowired SockItemService sockItemService) {
@@ -27,6 +31,7 @@ public class SockItemController {
 
     @PostMapping("/incoming")
     public ResponseEntity<String> addSocks(@Valid @RequestBody SockItemDto sockItemDto) {
+        LOG.info("Поступил запрос на загрузку носочных изделий: Color: {}, Material Percentage: {},  Units: {}", sockItemDto.getItemColor(), sockItemDto.getMaterialPercentage(), sockItemDto.getUnits());
         sockItemService.addSocks(SockItemMapper.MAPPER.mapToSockItem(sockItemDto));
 
         return ResponseEntity.ok("Операция выполнена успешна");
@@ -34,6 +39,7 @@ public class SockItemController {
 
     @PostMapping("/outgoing")
     public ResponseEntity<String> removeSocks(@Valid @RequestBody SockItemDto sockItemDto) {
+        LOG.info("Поступил запрос на отгрузку носочных изделий: Color: {}, Material Percentage: {},  Units: {}", sockItemDto.getItemColor(), sockItemDto.getMaterialPercentage(), sockItemDto.getUnits());
         sockItemService.removeSocks(SockItemMapper.MAPPER.mapToSockItem(sockItemDto));
 
         return ResponseEntity.ok("Операция выполнена успешна");
@@ -44,6 +50,7 @@ public class SockItemController {
             @RequestParam @NotBlank String itemColor,
             @RequestParam @NotBlank String compareType,
             @RequestParam @Min(1) @Max(100) Integer materialPercentage) {
+        LOG.info("Поступил запрос на получение информации о носочных изделиях: Color: {}, Material Percentage: {}", itemColor, materialPercentage);
         Integer count = sockItemService.getSocksCount(itemColor, compareType, materialPercentage);
 
         return ResponseEntity.ok(count);
