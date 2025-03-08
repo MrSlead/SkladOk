@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,6 +32,16 @@ public class GlobalExceptionHandler {
 
         LOG.warn("Ошибочный запрос от клиента: {}", error);
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        if (ex.getRequiredType() != null && ex.getRequiredType().isEnum()) {
+            return new ResponseEntity<>("Невалидное значение для enum. Разрешенные значения: " +
+                    Arrays.toString(ex.getRequiredType().getEnumConstants()), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Невалидный параметр: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({EntityNotFoundException.class, InsufficientStockException.class})

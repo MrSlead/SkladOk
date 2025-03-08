@@ -3,6 +3,7 @@ package com.almod.skladok.api.controller;
 import com.almod.skladok.api.dto.SockItemDto;
 import com.almod.skladok.api.mapper.SockItemMapper;
 import com.almod.skladok.store.service.SockItemService;
+import com.almod.skladok.utils.CompareType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -48,7 +49,7 @@ public class SockItemController {
     @GetMapping
     public ResponseEntity<Integer> getSocksCount(
             @RequestParam @NotBlank String itemColor,
-            @RequestParam @NotBlank String compareType,
+            @RequestParam CompareType compareType,
             @RequestParam @Min(1) @Max(100) Integer materialPercentage) {
         LOG.info("Поступил запрос на получение информации о носочных изделиях: Color: {}, Material Percentage: {}", itemColor, materialPercentage);
         Integer count = sockItemService.getSocksCount(itemColor, compareType, materialPercentage);
