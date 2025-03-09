@@ -38,19 +38,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        if (ex != null) {
-            if(ex.getRequiredType().isEnum()) {
-                String textError = "Невалидное значение для enum. Разрешенные значения: " + Arrays.toString(ex.getRequiredType().getEnumConstants());
-                LOG.warn("Ошибочный запрос от клиента: {}", textError);
-
-                return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
-            }
-            String textError = "Невалидный параметр: " + ex.getMessage();
-            LOG.warn(textError);
+        if(ex.getRequiredType() != null && ex.getRequiredType().isEnum()) {
+            String textError = "Невалидное значение для enum. Разрешенные значения: " + Arrays.toString(ex.getRequiredType().getEnumConstants());
+            LOG.warn("Ошибочный запрос от клиента: {}", textError);
 
             return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        String textError = "Невалидный параметр: " + ex.getMessage();
+        LOG.warn(textError);
+
+        return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({EntityNotFoundException.class, InsufficientStockException.class})
