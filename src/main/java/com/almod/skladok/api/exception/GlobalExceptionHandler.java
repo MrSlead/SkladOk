@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining("\n"));
 
         LOG.warn("Ошибочный запрос от клиента: {}", error);
+
         return new ResponseEntity<>(error, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
@@ -38,15 +39,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         if (ex.getRequiredType().isEnum()) {
-            return new ResponseEntity<>("Невалидное значение для enum. Разрешенные значения: " +
-                    Arrays.toString(ex.getRequiredType().getEnumConstants()), HttpStatus.BAD_REQUEST);
+            String textError = "Невалидное значение для enum. Разрешенные значения: " + Arrays.toString(ex.getRequiredType().getEnumConstants());
+            LOG.warn("Ошибочный запрос от клиента: {}", textError, HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Невалидный параметр: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        String textError = "Невалидный параметр: " + ex.getMessage();
+        LOG.warn(textError);
+
+        return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({EntityNotFoundException.class, InsufficientStockException.class})
     public ResponseEntity<String> handleEntityNotFoundException(Exception e) {
         LOG.warn("Ошибочный запрос от клиента: {}", e.getMessage());
+
         return new ResponseEntity<>("Ошибка запроса: " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
