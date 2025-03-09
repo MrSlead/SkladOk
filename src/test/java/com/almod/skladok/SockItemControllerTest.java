@@ -74,7 +74,7 @@ public class SockItemControllerTest {
                 .extract().response();
 
         Assertions.assertEquals(200, response.getStatusCode());
-        Assertions.assertEquals("15", response.getBody().print());
+        Assertions.assertEquals("{\"totalUnits\":15}", response.getBody().print());
     }
 
     @Test

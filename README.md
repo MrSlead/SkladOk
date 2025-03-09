@@ -19,8 +19,13 @@ git clone https://github.com/MrSlead/SkladOk.git
 cd SkladOk
 ```
 2. Соберите Java приложение:
+- Для сборки с тестами нужен включенный Docker
 ```bash
-maven clean package
+mvn clean package
+```
+- Без тестов
+```bash
+mvn clean package -DskipTests
 ```
 3. Соберите и запустите контейнеры:
 ```bash
