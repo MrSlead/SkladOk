@@ -84,5 +84,7 @@ docker-compose up --build
 
 Пример ответа:
 ```
-145
+{
+    "totalUnits": 242
+}
 ```
