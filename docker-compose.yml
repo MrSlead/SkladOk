@@ -17,6 +17,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: skladok-app
+    restart: always
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/skladok
     ports:
