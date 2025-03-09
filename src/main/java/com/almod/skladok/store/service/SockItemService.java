@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 public class SockItemService {
-    private static final Logger LOG = LoggerFactory.getLogger(SockItemController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SockItemService.class);
 
     private final SockItemRepository sockItemRepository;
 

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(SockItemController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationErrors(MethodArgumentNotValidException ex) {
@@ -38,16 +38,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        if (ex.getRequiredType().isEnum()) {
-            String textError = "Невалидное значение для enum. Разрешенные значения: " + Arrays.toString(ex.getRequiredType().getEnumConstants());
-            LOG.warn("Ошибочный запрос от клиента: {}", textError, HttpStatus.BAD_REQUEST);
+        if (ex != null) {
+            if(ex.getRequiredType().isEnum()) {
+                String textError = "Невалидное значение для enum. Разрешенные значения: " + Arrays.toString(ex.getRequiredType().getEnumConstants());
+                LOG.warn("Ошибочный запрос от клиента: {}", textError);
+
+                return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
+            }
+            String textError = "Невалидный параметр: " + ex.getMessage();
+            LOG.warn(textError);
 
             return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
         }
-        String textError = "Невалидный параметр: " + ex.getMessage();
-        LOG.warn(textError);
-
-        return new ResponseEntity<>(textError, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({EntityNotFoundException.class, InsufficientStockException.class})
