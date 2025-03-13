@@ -1,4 +1,4 @@
-FROM openjdk:21
+FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /opt/app/
 EXPOSE 8080
 COPY target/*.jar /opt/app/*.jar
